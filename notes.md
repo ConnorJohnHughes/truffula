@@ -34,6 +34,19 @@ PLEASE MAKE FREQUENT COMMITS AS YOU FILL OUT THIS FILE.
 - ColorPrinter test is to confirm color choice using red 
 
 ## TruffulaOptions.java / TruffulaOptionsTest.java
+- used for the configuration options on how the directory tree is displayed
+- options to configure color, show hidden files, and the root directory from where the tree begins
+- if color is disabled then all text is white
+- throws illegal argument exception for unknown flags(arguments) and path is missing
+- throws file not found exception if the directory chosen does not exist or if the path points to a file instead of a directory
+- getRoot() is used to return the root directory as a file object
+- isShowHidden() uses a boolen to tell if the show hidden files option is on or not
+- uses a toString to print out Truffula options that are chosen
+- isUseColor() is a boolean to show if color is on or not
+- TruffulaOptions() is a method used to show what options are chosen and handles errors.
+- uses constructor to parse options together with explicit values
+- Tests to show if options are set up correctly
+- test covers options for directory, color, and hidden files
 
 ## TruffulaPrinter.java / TruffulaPrinterTest.java
 
