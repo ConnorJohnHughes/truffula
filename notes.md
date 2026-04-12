@@ -30,7 +30,8 @@ PLEASE MAKE FREQUENT COMMITS AS YOU FILL OUT THIS FILE.
 - uses output stream for colors
 - constructs a ColorPrinter using a printStream and color of choice
 - construtor for colorPrinter
-
+- tests for colorPrinter
+- ColorPrinter test is to confirm color choice using red 
 
 ## TruffulaOptions.java / TruffulaOptionsTest.java
 
