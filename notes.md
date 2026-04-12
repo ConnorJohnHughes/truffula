@@ -14,7 +14,14 @@ PLEASE MAKE FREQUENT COMMITS AS YOU FILL OUT THIS FILE.
 - main = create truffula options -> pass to truffula printer -> then printTree
 
 ## ConsoleColor.java
-
+- file for colors in terminal
+- using ANSI escape codes for console colors
+- supports a handleful of colors
+- there is a reset code to go back to default color of console
+- uses constructor for color code as string
+- returns code as string
+- returns code as string for print statements
+- what does it mean when it says "escape" codes?
 ## ColorPrinter.java / ColorPrinterTest.java
 
 ## TruffulaOptions.java / TruffulaOptionsTest.java
