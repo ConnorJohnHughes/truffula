@@ -49,5 +49,17 @@ PLEASE MAKE FREQUENT COMMITS AS YOU FILL OUT THIS FILE.
 - test covers options for directory, color, and hidden files
 
 ## TruffulaPrinter.java / TruffulaPrinterTest.java
+- is responsible for printing out directory tree in a specific way
+- handles sorting, directory tree structure, and how the print is display in console
+- prints out in a case sensitive manner
+- truffulaPrinter handles options, console color, and colorPrinter printing out to console
+- uses constructor to make a TruffulaPrinter with the given options
+- uses construtor to use options and use an output stream for a printer
+- uses constructor to use options, output stream, and color selected for printer
+- this is where all options, color selected and the output stream comes together to build printer for console
+- Tests check to see if the options, color, and output stream work correctly
+- test to see if all options are put together for working printer
+- tests for the correct struture of tree being printed
+
 
 ## AlphabeticalFileSorter.java
