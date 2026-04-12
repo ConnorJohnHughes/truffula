@@ -66,3 +66,4 @@ PLEASE MAKE FREQUENT COMMITS AS YOU FILL OUT THIS FILE.
 - util class to sort files from directory in alphabetical order
 - uses an array of the files to be sorted in alphabetical order
 - uses lambdas to sort files
+ 
