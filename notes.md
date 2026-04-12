@@ -4,6 +4,14 @@ As part of Wave 0, please fill out notes for each of the below files. They are i
 PLEASE MAKE FREQUENT COMMITS AS YOU FILL OUT THIS FILE.
 
 ## App.java
+- Application to print a directory tree
+- uses colors to show hidden files, root of tree, and levels in the directory
+- hidden files are shown with a '.' before them
+- arguements used = -h to show hidden files and -nc to turn off color
+- path arguement is mandatory to use truffula
+- error messages for illegal arguments and no file found
+- this is where the main method is at to use the app
+- main = create truffula options -> pass to truffula printer -> then printTree
 
 ## ConsoleColor.java
 
