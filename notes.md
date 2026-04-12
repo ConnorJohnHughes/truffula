@@ -23,6 +23,14 @@ PLEASE MAKE FREQUENT COMMITS AS YOU FILL OUT THIS FILE.
 - returns code as string for print statements
 - what does it mean when it says "escape" codes?
 ## ColorPrinter.java / ColorPrinterTest.java
+- prints current color through an output stream
+- terminal prints out color to confirm
+- sets current color that will be used until changed again
+- optionally the color can reset after printing 
+- uses output stream for colors
+- constructs a ColorPrinter using a printStream and color of choice
+- construtor for colorPrinter
+
 
 ## TruffulaOptions.java / TruffulaOptionsTest.java
 
