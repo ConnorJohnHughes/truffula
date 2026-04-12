@@ -87,6 +87,15 @@ public class ColorPrinter {
    */
   public void print(String message, boolean reset) {
     // TODO: Implement this!
+
+    ColorPrinter printer = new ColorPrinter(printStream);
+    if(reset == true){
+      printer.printStream.print(currentColor + message + ConsoleColor.RESET);
+    }else {
+      printer.printStream.print(currentColor + message );
+    }
+
+  
   }
 
   /**
@@ -108,5 +117,21 @@ public class ColorPrinter {
   public ColorPrinter(PrintStream printStream, ConsoleColor color) {
     this.printStream = printStream;
     this.currentColor = color;
+  }
+
+  public static void main(String[] args) {
+      ColorPrinter printer = new ColorPrinter(System.out);
+      printer.setCurrentColor(ConsoleColor.RED);
+      printer.println("This is red text");
+      printer.setCurrentColor(ConsoleColor.BLUE);
+      printer.println("This is blue text");
+      printer.println("This is a reset message", true);
+      printer.println("Am i reset?");
+      printer.println("No");
+      printer.println("Let's try again");
+      printer.setCurrentColor(ConsoleColor.RESET);
+      printer.println("what about now?");
+      printer.println("That worked that time");
+
   }
 }
