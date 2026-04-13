@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TruffulaPrinterTest {
@@ -149,4 +150,219 @@ public class TruffulaPrinterTest {
         // Assert that the output matches the expected output exactly
         assertEquals(expected.toString(), output);
     }
+
+@Test
+public void testPrintTreeNoColorNoOrder(@TempDir File tempDir) throws IOException {
+    // Build the example directory structure:
+    // myFolder/
+    //    .hidden.txt
+    //    Apple.txt
+    //    banana.txt
+    //    Documents/
+    //       images/
+    //          cat.png
+    //          Dog.png
+    //       notes.txt
+    //       README.md
+    //    zebra.txt
+
+    File myFolder = new File(tempDir, "myFolder");
+    assertTrue(myFolder.mkdir(), "myFolder should be created");
+
+    File apple = new File(myFolder, "Apple.txt");
+    File banana = new File(myFolder, "banana.txt");
+    File zebra = new File(myFolder, "zebra.txt");
+    assertTrue(apple.createNewFile());
+    assertTrue(banana.createNewFile());
+    assertTrue(zebra.createNewFile());
+
+
+
+    File documents = new File(myFolder, "Documents");
+    assertTrue(documents.mkdir(), "Documents directory should be created");
+
+    File readme = new File(documents, "README.md");
+    File notes = new File(documents, "notes.txt");
+    assertTrue(readme.createNewFile());
+    assertTrue(notes.createNewFile());
+
+    File images = new File(documents, "images");
+    assertTrue(images.mkdir(), "images directory should be created");
+
+    File cat = new File(images, "cat.png");
+    File dog = new File(images, "Dog.png");
+    assertTrue(cat.createNewFile());
+    assertTrue(dog.createNewFile());
+
+    // showHidden = false, useColor = false
+    TruffulaOptions options = new TruffulaOptions(myFolder, false, false);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(baos);
+
+    TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+    printer.printTree();
+
+    String output = baos.toString();
+    String nl = System.lineSeparator();
+
+    assertTrue(output.contains("myFolder/" + nl));
+    assertTrue(output.contains("   Apple.txt" + nl));
+    assertTrue(output.contains("   banana.txt" + nl));
+    assertTrue(output.contains("   Documents/" + nl));
+    assertTrue(output.contains("      images/" + nl));
+    assertTrue(output.contains("         cat.png" + nl));
+    assertTrue(output.contains("         Dog.png" + nl));
+    assertTrue(output.contains("      notes.txt" + nl));
+    assertTrue(output.contains("      README.md" + nl));
+    assertTrue(output.contains("   zebra.txt" + nl));
+
+}
+
+@Test
+public void testPrintTreeNoColorNoOrder_Fords(@TempDir File tempDir) throws IOException {
+
+    // Build the example directory structure:
+    // Ford/
+    //    Fusion.txt
+    //    Escape.txt
+    //    F150.txt
+    //    Mustang/
+    //       Models/
+    //          GT.txt
+    //          EcoBoost.txt
+    //       Mach1.txt
+    //       Shelby.txt
+
+    File ford = new File(tempDir, "Ford");
+    assertTrue(ford.mkdir(), "Ford should be created");
+
+    File fusion = new File(ford, "Fusion.txt");
+    File escape = new File(ford, "Escape.txt");
+    File f150 = new File(ford, "F150.txt");
+    assertTrue(fusion.createNewFile());
+    assertTrue(escape.createNewFile());
+    assertTrue(f150.createNewFile());
+
+    File mustang = new File(ford, "Mustang");
+    assertTrue(mustang.mkdir(), "Mustang directory should be created");
+
+    File mach1 = new File(mustang, "Mach1.txt");
+    File shelby = new File(mustang, "Shelby.txt");
+    assertTrue(mach1.createNewFile());
+    assertTrue(shelby.createNewFile());
+
+    File models = new File(mustang, "Models");
+    assertTrue(models.mkdir(), "Models directory should be created");
+
+    File gt = new File(models, "GT.txt");
+    File ecoboost = new File(models, "EcoBoost.txt");
+    assertTrue(gt.createNewFile());
+    assertTrue(ecoboost.createNewFile());
+
+    // showHidden = false, useColor = false
+    TruffulaOptions options = new TruffulaOptions(ford, false, false);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(baos);
+
+    TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+    printer.printTree();
+
+    String output = baos.toString();
+    String nl = System.lineSeparator();
+
+    assertTrue(output.contains("Ford/" + nl));
+    assertTrue(output.contains("   Fusion.txt" + nl));
+    assertTrue(output.contains("   Escape.txt" + nl));
+    assertTrue(output.contains("   Mustang/" + nl));
+    assertTrue(output.contains("      Models/" + nl));
+    assertTrue(output.contains("         GT.txt" + nl));
+    assertTrue(output.contains("         EcoBoost.txt" + nl));
+    assertTrue(output.contains("      Mach1.txt" + nl));
+    assertTrue(output.contains("      Shelby.txt" + nl));
+    assertTrue(output.contains("   F150.txt" + nl));
+
+}
+
+@Test
+public void testPrintTreeNoColorNoOrder_AmericanBully(@TempDir File tempDir) throws IOException {
+
+    // Build the example directory structure:
+    // AmericanBully/
+    //    Blue/
+    //       Zeus.txt
+    //       Luna.txt
+    //    Brindle/
+    //       Max.txt
+    //       Bella.txt
+    //    Fawn/
+    //       Rocky.txt
+    //       Daisy.txt
+    //    Black/
+    //       King.txt
+    //       Shadow.txt
+
+    File bully = new File(tempDir, "AmericanBully");
+    assertTrue(bully.mkdir(), "AmericanBully should be created");
+
+    File blue = new File(bully, "Blue");
+    File brindle = new File(bully, "Brindle");
+    File fawn = new File(bully, "Fawn");
+    File black = new File(bully, "Black");
+
+    assertTrue(blue.mkdir());
+    assertTrue(brindle.mkdir());
+    assertTrue(fawn.mkdir());
+    assertTrue(black.mkdir());
+
+    File zeus = new File(blue, "Zeus.txt");
+    File luna = new File(blue, "Luna.txt");
+    assertTrue(zeus.createNewFile());
+    assertTrue(luna.createNewFile());
+
+    File max = new File(brindle, "Max.txt");
+    File bella = new File(brindle, "Bella.txt");
+    assertTrue(max.createNewFile());
+    assertTrue(bella.createNewFile());
+
+    File rocky = new File(fawn, "Rocky.txt");
+    File daisy = new File(fawn, "Daisy.txt");
+    assertTrue(rocky.createNewFile());
+    assertTrue(daisy.createNewFile());
+
+    File king = new File(black, "King.txt");
+    File shadow = new File(black, "Shadow.txt");
+    assertTrue(king.createNewFile());
+    assertTrue(shadow.createNewFile());
+
+    // showHidden = false, useColor = false
+    TruffulaOptions options = new TruffulaOptions(bully, false, false);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(baos);
+
+    TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+    printer.printTree();
+
+    String output = baos.toString();
+    String nl = System.lineSeparator();
+
+    assertTrue(output.contains("AmericanBully/" + nl));
+    assertTrue(output.contains("   Blue/" + nl));
+    assertTrue(output.contains("      Zeus.txt" + nl));
+    assertTrue(output.contains("      Luna.txt" + nl));
+    assertTrue(output.contains("   Brindle/" + nl));
+    assertTrue(output.contains("      Max.txt" + nl));
+    assertTrue(output.contains("      Bella.txt" + nl));
+    assertTrue(output.contains("   Fawn/" + nl));
+    assertTrue(output.contains("      Rocky.txt" + nl));
+    assertTrue(output.contains("      Daisy.txt" + nl));
+    assertTrue(output.contains("   Black/" + nl));
+    assertTrue(output.contains("      King.txt" + nl));
+    assertTrue(output.contains("      Shadow.txt" + nl));
+
+    // Hidden file should NOT appear
+    assertFalse(output.contains(".hidden.txt"));
+}
 }
