@@ -1,6 +1,9 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import org.junit.jupiter.api.io.TempDir;
+
+
 /**
  * Represents configuration options for controlling how a directory tree is displayed.
  * 
@@ -102,9 +105,46 @@ public class TruffulaOptions  {
    */
   public TruffulaOptions(String[] args) throws IllegalArgumentException, FileNotFoundException {
     // TODO: Replace the below lines with your implementation
-    root = null;
-    showHidden = false;
-    useColor = false;
+    boolean Hiddenflag = false;
+    boolean Colorflag = true;
+     String path = "";
+
+    if(args.length == 0 || args.length > 3){
+      throw new IllegalArgumentException();
+    }
+    if(args.length == 3){
+      path = args[2];
+    } else
+      if(args.length == 2){
+        path = args[1];
+      }else 
+        if(args.length == 1){
+          path = args[0];
+        }
+       // System.out.println(path);
+  File directory = new File(path);
+    for(int i = 0; i < args.length - 1; i++){
+      if(args[i].equals("-nc")){
+        Colorflag = false;
+      } else
+      if(args[i].equals( "-h")){
+        Hiddenflag = true;
+      } else {
+        throw new IllegalArgumentException();
+      }
+    }
+    
+    
+    if(!directory.isDirectory()){
+      throw new FileNotFoundException();
+    }
+    root = directory;
+    // System.out.println(path);
+
+
+
+    useColor = Colorflag;
+    showHidden = Hiddenflag;
   }
 
   /**
