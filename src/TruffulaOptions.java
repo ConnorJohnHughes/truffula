@@ -1,8 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import org.junit.jupiter.api.io.TempDir;
-
 
 /**
  * Represents configuration options for controlling how a directory tree is displayed.
