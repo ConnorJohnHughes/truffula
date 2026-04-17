@@ -51,6 +51,7 @@ public class App {
     TruffulaOptions options = new TruffulaOptions(args);
     TruffulaPrinter printer = new TruffulaPrinter(options);
     printer.printTree();
+    
 
 
 

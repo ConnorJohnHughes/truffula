@@ -474,7 +474,7 @@ public void testPrintTreeShowHiddenSingleColor(@TempDir File tempDir) throws IOE
 
     StringBuilder expected = new StringBuilder();
     expected.append(white).append("root/").append(nl).append(reset);
-    expected.append(purple).append("    .secret.txtx").append(nl).append(reset);
+    expected.append(purple).append("   .secret.txt").append(nl).append(reset);
 
     assertEquals(expected.toString(), output);
 
@@ -514,9 +514,9 @@ public void testPrintTreeShowHiddenFilesColor(@TempDir File tempDir) throws IOEx
     assertTrue(output.contains("   visible.txt" + nl));  
 
     StringBuilder expected = new StringBuilder();
-    expected.append(white).append("root/").append(reset);
-    expected.append(purple).append("    .hidden.txt").append(reset);
-    expected.append(purple).append("    visible.txt").append(reset);
+    expected.append(white).append("root/").append(nl).append(reset);
+    expected.append(purple).append("   .hidden.txt").append(nl).append(reset);
+    expected.append(purple).append("   visible.txt").append(nl).append(reset);
 
     assertEquals(expected.toString(), output);
 }
@@ -528,7 +528,9 @@ public void testPrintTreeHiddenDisabledColor(@TempDir File tempDir) throws IOExc
     assertTrue(root.mkdir());
 
     File hidden = new File(root, ".hidden.txt");
+    File visible = new File(root, "visible.txt");
     assertTrue(hidden.createNewFile());
+    assertTrue(visible.createNewFile());
 
     // showHidden = false
     TruffulaOptions options = new TruffulaOptions(root, false, true);
@@ -540,6 +542,7 @@ public void testPrintTreeHiddenDisabledColor(@TempDir File tempDir) throws IOExc
     printer.printTree();
 
     String output = baos.toString();
+    String nl = System.lineSeparator();
 
     ConsoleColor reset = ConsoleColor.RESET;
     ConsoleColor purple = ConsoleColor.PURPLE;
@@ -548,9 +551,96 @@ public void testPrintTreeHiddenDisabledColor(@TempDir File tempDir) throws IOExc
     assertFalse(output.contains(".hidden.txt"));  // does not show file
 
     StringBuilder expected = new StringBuilder();
-    expected.append(white).append("root/").append(reset);
-    expected.append(purple).append("    .hidden.txt").append(reset);
+    expected.append(white).append("root/").append(nl).append(reset);
+    // expected.append(purple).append("    .hidden.txt").append(nl).append(reset);
+    expected.append(purple).append("   visible.txt").append(nl).append(reset);
 
     assertEquals(expected.toString(), output);
+}
+@Test
+public void testPrintTreeColorNoOrder(@TempDir File tempDir) throws IOException {
+
+    // Build structure:
+    // root/
+    //    file1.txt
+    //    folder/
+    //       file2.txt
+
+    File root = new File(tempDir, "root");
+    assertTrue(root.mkdir());
+
+    File file1 = new File(root, "file1.txt");
+    assertTrue(file1.createNewFile());
+
+    File folder = new File(root, "folder");
+    assertTrue(folder.mkdir());
+
+    File file2 = new File(folder, "file2.txt");
+    assertTrue(file2.createNewFile());
+    
+    TruffulaOptions options = new TruffulaOptions(root, false, true);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(baos);
+
+    TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+    printer.printTree();
+
+    String output = baos.toString();
+    String nl = System.lineSeparator();
+
+   
+    ConsoleColor reset = ConsoleColor.RESET;
+    ConsoleColor white = ConsoleColor.WHITE;
+    ConsoleColor purple = ConsoleColor.PURPLE;
+    ConsoleColor yellow = ConsoleColor.YELLOW;
+
+    
+    assertTrue(output.contains(white + "root/" + nl + reset));
+    assertTrue(output.contains(purple + "   file1.txt" + nl + reset));
+    assertTrue(output.contains(purple + "   folder/" + nl + reset));
+    assertTrue(output.contains(yellow + "      file2.txt" + nl + reset));
+}
+@Test
+public void testPrintTreeAlphabeticalSorting(@TempDir File tempDir) throws IOException {
+
+    // Build structure:
+    // root/
+    //    zebra.txt
+    //    Apple.txt
+    //    banana.txt
+
+    File root = new File(tempDir, "root");
+    assertTrue(root.mkdir());
+
+    File zebra = new File(root, "zebra.txt");
+    File apple = new File(root, "Apple.txt");
+    File banana = new File(root, "banana.txt");
+
+    assertTrue(zebra.createNewFile());
+    assertTrue(apple.createNewFile());
+    assertTrue(banana.createNewFile());
+
+    TruffulaOptions options = new TruffulaOptions(root, false, false);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(baos);
+
+    TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+    printer.printTree();
+
+    String output = baos.toString();
+    String nl = System.lineSeparator();
+
+    int appleIndex = output.indexOf("   Apple.txt" + nl);
+    int bananaIndex = output.indexOf("   banana.txt" + nl);
+    int zebraIndex = output.indexOf("   zebra.txt" + nl);
+
+    assertTrue(appleIndex != -1);
+    assertTrue(bananaIndex != -1);
+    assertTrue(zebraIndex != -1);
+
+    assertTrue(appleIndex < bananaIndex);
+    assertTrue(bananaIndex < zebraIndex);
 }
 }

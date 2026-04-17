@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.PrintStream;
-
 import java.util.List;
 
 
@@ -118,29 +117,57 @@ public class TruffulaPrinter {
     // out.println("printTree was called!");
     // out.println("My options are: " + options);
     boolean hidden = options.isShowHidden();
-    printTreeHelper(options.getRoot(), 0, hidden);
+    boolean color = options.isUseColor();
+    // for (ConsoleColor consoleColor : DEFAULT_COLOR_SEQUENCE) {
+    //   System.out.println(consoleColor + "test");
+    // }
+    
+    
+    
+    
+    
+   
+    printTreeHelper(options.getRoot(), 0, hidden,  color);
   }
 
-  private void printTreeHelper(File directory, int depth, boolean hidden){
-    System.out.println(hidden);
+  private void printTreeHelper(File directory, int depth, boolean hidden, boolean color ){
+    // System.out.println(hidden);
+    List<ConsoleColor> colors = colorSequence;
     String indent = "   ".repeat(depth);
+    if (!color) {
+        out.setCurrentColor(ConsoleColor.RESET);;
+      } else if(depth % 3 == 0){
+        out.setCurrentColor(colors.get(0));
+      }else if(depth % 3 == 1){
+        out.setCurrentColor(colors.get(1));
+      }else if(depth % 3 == 2){
+        out.setCurrentColor(colors.get(2));}
 
     if(directory.isDirectory()){ 
-
-      out.println(indent + directory.getName() + "/");
+  
+     
+      out.println(  indent + directory.getName() + "/");
+      
+    
 
         File[] children = directory.listFiles();
         if(children != null){
+          
           for(File child : children){
+            
+           
             if(!hidden){
               if(child.getName().startsWith(".")){
                 continue;
               }
             }
-          printTreeHelper(child, depth + 1, hidden);
+            
+          printTreeHelper(child, depth + 1, hidden, color);
+          
           }
         } 
       } else {
+        
           out.println(indent + directory.getName());
         }
 
