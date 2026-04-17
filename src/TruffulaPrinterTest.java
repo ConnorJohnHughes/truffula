@@ -365,4 +365,192 @@ public void testPrintTreeNoColorNoOrder_AmericanBully(@TempDir File tempDir) thr
     // Hidden file should NOT appear
     assertFalse(output.contains(".hidden.txt"));
 }
+
+@Test
+public void testPrintTreeShowHiddenSingle(@TempDir File tempDir) throws IOException {
+
+    File root = new File(tempDir, "root");
+    assertTrue(root.mkdir());
+
+    // Create hidden file
+    File hidden = new File(root, ".secret.txt");
+    assertTrue(hidden.createNewFile());
+
+    // showHidden = true
+    TruffulaOptions options = new TruffulaOptions(root, true, false);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(baos);
+
+    TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+    printer.printTree();
+
+    String output = baos.toString();
+    String nl = System.lineSeparator();
+
+    assertTrue(output.contains("root/" + nl));
+    assertTrue(output.contains("   .secret.txt" + nl)); // show hidden file
+}
+
+@Test
+public void testPrintTreeShowHiddenFiles(@TempDir File tempDir) throws IOException {
+
+    File root = new File(tempDir, "root");
+    assertTrue(root.mkdir());
+
+   
+    File hidden = new File(root, ".hidden.txt");
+    File visible = new File(root, "visible.txt");
+    assertTrue(hidden.createNewFile());
+    assertTrue(visible.createNewFile());
+
+    // showHidden = true
+    TruffulaOptions options = new TruffulaOptions(root, true, false);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(baos);
+
+    TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+    printer.printTree();
+
+    String output = baos.toString();
+    String nl = System.lineSeparator();
+
+    assertTrue(output.contains("root/" + nl));
+    assertTrue(output.contains("   .hidden.txt" + nl));  // show hidden file and normal file
+    assertTrue(output.contains("   visible.txt" + nl));  
+}
+
+@Test
+public void testPrintTreeHiddenDisabled(@TempDir File tempDir) throws IOException {
+
+    File root = new File(tempDir, "root");
+    assertTrue(root.mkdir());
+
+    File hidden = new File(root, ".hidden.txt");
+    assertTrue(hidden.createNewFile());
+
+    // showHidden = false
+    TruffulaOptions options = new TruffulaOptions(root, false, false);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(baos);
+
+    TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+    printer.printTree();
+
+    String output = baos.toString();
+
+    assertFalse(output.contains(".hidden.txt"));  // does not show file
+}
+@Test
+public void testPrintTreeShowHiddenSingleColor(@TempDir File tempDir) throws IOException {
+
+    File root = new File(tempDir, "root");
+    assertTrue(root.mkdir());
+
+    // Create hidden file
+    File hidden = new File(root, ".secret.txt");
+    assertTrue(hidden.createNewFile());
+
+    // showHidden = true
+    TruffulaOptions options = new TruffulaOptions(root, true, true);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(baos);
+
+    TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+    printer.printTree();
+
+    String output = baos.toString();
+    String nl = System.lineSeparator();
+
+    ConsoleColor reset = ConsoleColor.RESET;
+    ConsoleColor purple = ConsoleColor.PURPLE;
+    ConsoleColor white = ConsoleColor.WHITE;
+
+    assertTrue(output.contains("root/" + nl));
+    assertTrue(output.contains("   .secret.txt" + nl)); // show hidden file
+
+    StringBuilder expected = new StringBuilder();
+    expected.append(white).append("root/").append(nl).append(reset);
+    expected.append(purple).append("    .secret.txtx").append(nl).append(reset);
+
+    assertEquals(expected.toString(), output);
+
+
+}
+
+@Test
+public void testPrintTreeShowHiddenFilesColor(@TempDir File tempDir) throws IOException {
+
+    File root = new File(tempDir, "root");
+    assertTrue(root.mkdir());
+
+   
+    File hidden = new File(root, ".hidden.txt");
+    File visible = new File(root, "visible.txt");
+    assertTrue(hidden.createNewFile());
+    assertTrue(visible.createNewFile());
+
+    // showHidden = true
+    TruffulaOptions options = new TruffulaOptions(root, true, true);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(baos);
+
+    TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+    printer.printTree();
+
+    String output = baos.toString();
+    String nl = System.lineSeparator();
+
+    ConsoleColor reset = ConsoleColor.RESET;
+    ConsoleColor purple = ConsoleColor.PURPLE;
+    ConsoleColor white = ConsoleColor.WHITE;
+
+    assertTrue(output.contains("root/" + nl));
+    assertTrue(output.contains("   .hidden.txt" + nl));  // show hidden file and normal file
+    assertTrue(output.contains("   visible.txt" + nl));  
+
+    StringBuilder expected = new StringBuilder();
+    expected.append(white).append("root/").append(reset);
+    expected.append(purple).append("    .hidden.txt").append(reset);
+    expected.append(purple).append("    visible.txt").append(reset);
+
+    assertEquals(expected.toString(), output);
+}
+
+@Test
+public void testPrintTreeHiddenDisabledColor(@TempDir File tempDir) throws IOException {
+
+    File root = new File(tempDir, "root");
+    assertTrue(root.mkdir());
+
+    File hidden = new File(root, ".hidden.txt");
+    assertTrue(hidden.createNewFile());
+
+    // showHidden = false
+    TruffulaOptions options = new TruffulaOptions(root, false, true);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(baos);
+
+    TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+    printer.printTree();
+
+    String output = baos.toString();
+
+    ConsoleColor reset = ConsoleColor.RESET;
+    ConsoleColor purple = ConsoleColor.PURPLE;
+    ConsoleColor white = ConsoleColor.WHITE;
+
+    assertFalse(output.contains(".hidden.txt"));  // does not show file
+
+    StringBuilder expected = new StringBuilder();
+    expected.append(white).append("root/").append(reset);
+    expected.append(purple).append("    .hidden.txt").append(reset);
+
+    assertEquals(expected.toString(), output);
+}
 }

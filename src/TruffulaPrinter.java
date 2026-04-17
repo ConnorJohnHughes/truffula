@@ -117,18 +117,27 @@ public class TruffulaPrinter {
 
     // out.println("printTree was called!");
     // out.println("My options are: " + options);
-    printTreeHelper(options.getRoot(), 0);
+    boolean hidden = options.isShowHidden();
+    printTreeHelper(options.getRoot(), 0, hidden);
   }
 
-  private void printTreeHelper(File directory, int depth){
+  private void printTreeHelper(File directory, int depth, boolean hidden){
+    System.out.println(hidden);
     String indent = "   ".repeat(depth);
+
     if(directory.isDirectory()){ 
+
       out.println(indent + directory.getName() + "/");
 
         File[] children = directory.listFiles();
         if(children != null){
           for(File child : children){
-          printTreeHelper(child, depth + 1);
+            if(!hidden){
+              if(child.getName().startsWith(".")){
+                continue;
+              }
+            }
+          printTreeHelper(child, depth + 1, hidden);
           }
         } 
       } else {
