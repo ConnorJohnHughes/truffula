@@ -67,3 +67,6 @@ PLEASE MAKE FREQUENT COMMITS AS YOU FILL OUT THIS FILE.
 - uses an array of the files to be sorted in alphabetical order
 - uses lambdas to sort files
  
+
+
+ -----------------------Wave 8 Completed--------------------------------
